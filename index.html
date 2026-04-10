@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Water Pump Dashboard</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      color: white;
+      text-align: center;
+      background: radial-gradient(circle at top, #0b3d91, #020c1b);
+      background-size: cover;
+    }
+
+    h1 {
+      color: gold;
+      margin-top: 20px;
+      text-shadow: 0 0 15px gold;
+    }
+
+    .card {
+      background: rgba(0,0,40,0.7);
+      border: 2px solid gold;
+      border-radius: 15px;
+      padding: 25px;
+      margin: 20px auto;
+      width: 300px;
+      box-shadow: 0 0 20px #0077ff;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    .on {
+      background: gold;
+      color: black;
+      box-shadow: 0 0 20px gold;
+    }
+
+    .off {
+      background: #0044ff;
+      color: white;
+      box-shadow: 0 0 20px #0044ff;
+    }
+
+    .logout {
+      background: linear-gradient(90deg, gold, #0044ff);
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 0 15px gold, 0 0 15px #0044ff;
+      border-radius: 10px;
+      padding: 12px 25px;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+
+    .logout:hover {
+      background: linear-gradient(90deg, #0044ff, gold);
+      color: black;
+      box-shadow: 0 0 25px gold, 0 0 25px #0044ff;
+    }
+
+    .value {
+      font-size: 28px;
+      color: gold;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 22px; }
+      .card { width: 90%; padding: 15px; }
+      button { padding: 10px 20px; font-size: 16px; }
+      .value { font-size: 22px; }
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      border-radius: 8px;
+      border: none;
+      margin: 5px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>💧 Smart Water Pump and temperature and humidity Dashboard</h1>
+
+<!-- Login -->
+<div id="loginCard" class="card">
+  <h2>Login</h2>
+  <input type="email" id="email" placeholder="Email"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button id="loginBtn" class="on">Login</button>
+</div>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Polytunnel Control</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+<style>
+:root{
+  --blue:#0d47a1;
+  --dark:#081624;
+  --gold:#fbc02d;
+  --light:#eaeff5;
+}
+ 
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:url("https://static.vecteezy.com/system/resources/previews/001/882/531/original/dark-blue-technology-background-free-vector.jpg") center/cover fixed;
+  color:var(--gold);
+  min-height:100vh;
+}
+ 
+h1{
+  margin:15px 0;
+  text-align:center;
+  font-size:1.4rem;
+  letter-spacing:0.08em;
+}
+ 
+/* LOGIN */
+#loginForm{
+  max-width:360px;
+  margin:70px auto;
+  background:rgba(8,22,36,0.95);
+  padding:25px;
+  border-radius:14px;
+  border:1px solid var(--gold);
+}
+ 
+#loginForm input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+  border:1px solid var(--gold);
+  background:#0e2238;
+  color:#fff;
+  font-size:0.95rem;
+  box-sizing:border-box;
+}
+ 
+#loginForm button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,var(--gold),#c49000);
+  font-weight:bold;
+  font-size:1rem;
+  cursor:pointer;
+  color:#081624;
+}
+ 
+/* DASHBOARD */
+#dashboard{ display:none; }
+ 
+.relay-container{
+  max-width:420px;
+  margin:10px auto;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:0 12px;
+}
+ 
+/* sensor row */
+.sensor-row{
+  display:flex;
+  gap:10px;
+}
+ 
+.sensor-box{
+  flex:1;
+  background:rgba(8,22,36,0.9);
+  border:1px solid var(--gold);
+  border-radius:14px;
+  padding:12px 8px;
+  text-align:center;
+}
+ 
+.sensor-label{
+  font-size:0.62rem;
+  color:var(--light);
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  margin-bottom:4px;
+}
+ 
+.sensor-val{
+  font-size:1.45rem;
+  font-weight:bold;
+  color:var(--gold);
+}
+ 
+.sensor-unit{
+  font-size:0.62rem;
+  color:var(--light);
+  margin-top:2px;
+}
+ 
+/* mode row */
+.mode-row{
+  display:flex;
+  gap:8px;
+}
+ 
+.mode-btn{
+  flex:1;
+  padding:9px 4px;
+  border-radius:10px;
+  border:1px solid var(--gold);
+  background:rgba(8,22,36,0.8);
+  color:var(--light);
+  font-size:0.75rem;
+  font-weight:bold;
+  letter-spacing:0.08em;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+ 
+.mode-btn.active{
+  background:linear-gradient(135deg,#1565c0,var(--blue));
+  color:var(--gold);
+}
+ 
+/* device card */
+.relay-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:rgba(8,22,36,0.9);
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid var(--gold);
+  transition:border-color 0.3s;
+}
+ 
+.relay-card-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+ 
+.relay-icon{
+  font-size:20px;
+  width:34px;
+  text-align:center;
+}
+ 
+.relay-card h2{
+  margin:0 0 3px;
+  font-size:0.88rem;
+  letter-spacing:0.06em;
+}
+ 
+.relay-card span{
+  font-size:0.75rem;
+}
+ 
+.status-on  { color:#69f0ae; }
+.status-off { color:#ef9a9a; }
+.status-auto{ color:#80d8ff; }
+ 
+/* toggle switch */
+.switch{
+  position:relative;
+  width:48px;
+  height:26px;
+  flex-shrink:0;
+}
+.switch input{ display:none; }
+.slider{
+  position:absolute;
+  inset:0;
+  background:#0e2238;
+  border:1px solid var(--gold);
+  border-radius:13px;
+  cursor:pointer;
+  transition:background 0.25s;
+}
+.slider::before{
+  content:'';
+  position:absolute;
+  width:18px; height:18px;
+  left:3px; top:3px;
+  border-radius:50%;
+  background:var(--light);
+  transition:transform 0.25s, background 0.25s;
+}
+.switch input:checked + .slider{
+  background:linear-gradient(135deg,#1565c0,var(--blue));
+}
+.switch input:checked + .slider::before{
+  transform:translateX(22px);
+  background:var(--gold);
+}
+.switch input:disabled + .slider{
+  opacity:0.4;
+  cursor:not-allowed;
+}
+ 
+/* bottom buttons */
+#allOffBtn{
+  display:block;
+  width:calc(100% - 24px);
+  max-width:420px;
+  margin:4px auto 0;
+  padding:11px;
+  border:1px solid #c62828;
+  border-radius:10px;
+  background:rgba(150,20,20,0.25);
+  color:#ef9a9a;
+  font-weight:bold;
+  font-size:0.8rem;
+  letter-spacing:0.1em;
+  cursor:pointer;
+}
+ 
+#logoutBtn{
+  display:block;
+  width:calc(100% - 24px);
+  max-width:420px;
+  margin:10px auto 20px;
+  padding:10px;
+  border:1px solid var(--gold);
+  border-radius:10px;
+  background:transparent;
+  color:var(--gold);
+  font-weight:bold;
+  font-size:0.8rem;
+  letter-spacing:0.1em;
+  cursor:pointer;
+}
+ 
+footer{
+  text-align:center;
+  font-size:0.72rem;
+  margin:15px 0;
+  color:var(--gold);
+  letter-spacing:0.14em;
+}
+</style>
+</head>
+ 
+<body>
+ 
+<h1> POLYTUNNEL CONTROL</h1>
+ 
+<!-- LOGIN -->
+<div id="loginForm">
+  <input type="email"    id="email"    placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button id="loginBtn">LOGIN</button>
+</div>
+ 
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="relay-container">
+ 
+    <!-- Sensor boxes -->
+    <div class="sensor-row">
+      <div class="sensor-box">
+        <div class="sensor-label">Temp</div>
+        <div class="sensor-val" id="tempVal">--</div>
+        <div class="sensor-unit">°C</div>
+      </div>
+      <div class="sensor-box">
+        <div class="sensor-label">Humidity</div>
+        <div class="sensor-val" id="humVal">--</div>
+        <div class="sensor-unit">% RH</div>
+      </div>
+      <div class="sensor-box">
+        <div class="sensor-label">Mode</div>
+        <div class="sensor-val" id="modeVal" style="font-size:0.95rem;padding-top:6px">AUTO</div>
+        <div class="sensor-unit" id="modeDesc">temp ctrl</div>
+      </div>
+    </div>
+ 
+    <!-- Mode buttons -->
+    <div class="mode-row">
+      <button class="mode-btn active" id="btnAuto"   onclick="setMode('auto')">⚙ AUTO</button>
+      <button class="mode-btn"        id="btnManual" onclick="setMode('manual')"> MANUAL</button>
+    </div>
+ 
+    <!-- Fan card -->
+    <div class="relay-card" id="fanCard">
+      <div class="relay-card-left">
+        <div class="relay-icon">🌀</div>
+        <div>
+          <h2>VENTILATION FAN</h2>
+          <span id="fanStatus" class="status-auto">AUTO · STANDBY</span>
+        </div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="fanToggle" onchange="manualFan(this.checked)">
+        <span class="slider"></span>
+      </label>
+    </div>
+ 
+  </div>
+ 
+  <button id="allOffBtn">⬛ TURN ALL OFF</button>
+  <button id="logoutBtn">↩ LOGOUT</button>
+</div>
+ 
+<footer>Created by SMART SPACE</footer>
+ 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+ 
+<script>
+  firebase.initializeApp({
+    apiKey:      "AIzaSyBeMKIacnnUZZIAQothDYKoQNsUWjMNuC8",
+    authDomain:  "water-pump-ab584.firebaseapp.com",
+    databaseURL: "https://water-pump-ab584-default-rtdb.europe-west1.firebasedatabase.app"
+  });
+ 
+  const allowedEmail    = "airroled@gmail.com";
+  const allowedPassword = "Temp.01";
+ 
+  const loginForm = document.getElementById("loginForm");
+  const dashboard = document.getElementById("dashboard");
+ 
+  /* LOGIN */
+  document.getElementById("loginBtn").onclick = () => {
+    const e = document.getElementById("email").value.trim();
+    const p = document.getElementById("password").value;
+ 
+    if (e === allowedEmail && p === allowedPassword) {
+      firebase.auth().signInWithEmailAndPassword(e, p)
+        .then(() => {
+          loginForm.style.display = "none";
+          dashboard.style.display = "block";
+          startListeners();
+        })
+        .catch(err => alert("Login failed: " + err.message));
+    } else {
+      alert("Invalid email or password.");
+    }
+  };
+ 
+  /* LISTENERS */
+  function startListeners() {
+    const db = firebase.database();
+ 
+    db.ref("/temperature").on("value", s => {
+      const v = s.val();
+      document.getElementById("tempVal").textContent = v !== null ? parseFloat(v).toFixed(1) : "--";
+    });
+ 
+    db.ref("/humidity").on("value", s => {
+      const v = s.val();
+      document.getElementById("humVal").textContent = v !== null ? parseFloat(v).toFixed(1) : "--";
+    });
+ 
+    db.ref("/mode").on("value", s => {
+      updateModeUI(s.val() || "auto");
+    });
+ 
+    db.ref("/fan").on("value", s => {
+      const on = s.val() === true;
+      document.getElementById("fanToggle").checked = on;
+      updateFanCard(on);
+    });
+  }
+ 
+  /* MODE UI */
+  function updateModeUI(m) {
+    const isAuto = m === "auto";
+    document.getElementById("modeVal").textContent  = m.toUpperCase();
+    document.getElementById("modeDesc").textContent = isAuto ? "temp ctrl" : "phone ctrl";
+    document.getElementById("btnAuto").classList.toggle("active", isAuto);
+    document.getElementById("btnManual").classList.toggle("active", !isAuto);
+    const tog = document.getElementById("fanToggle");
+    tog.disabled = isAuto;
+    updateFanCard(tog.checked);
+  }
+ 
+  /* FAN CARD */
+  function updateFanCard(on) {
+    const isAuto   = document.getElementById("btnAuto").classList.contains("active");
+    const statusEl = document.getElementById("fanStatus");
+    const card     = document.getElementById("fanCard");
+ 
+    if (isAuto) {
+      statusEl.className   = "status-auto";
+      statusEl.textContent = "AUTO · " + (on ? "RUNNING" : "STANDBY");
+      card.style.borderColor = "var(--gold)";
+    } else {
+      if (on) {
+        statusEl.className   = "status-on";
+        statusEl.textContent = "● ON";
+        card.style.borderColor = "#69f0ae";
+      } else {
+        statusEl.className   = "status-off";
+        statusEl.textContent = "○ OFF";
+        card.style.borderColor = "var(--gold)";
+      }
+    }
+  }
+ 
+  /* CONTROLS */
+  function setMode(m) {
+    firebase.database().ref("/mode").set(m);
+  }
+ 
+  function manualFan(state) {
+    if (document.getElementById("btnAuto").classList.contains("active")) return;
+    firebase.database().ref("/fan").set(state);
+  }
+ 
+  document.getElementById("allOffBtn").onclick = () => {
+    firebase.database().ref("/fan").set(false);
+    firebase.database().ref("/mode").set("manual");
+  };
+ 
+  document.getElementById("logoutBtn").onclick = () => {
+    firebase.auth().signOut().then(() => {
+      dashboard.style.display = "none";
+      loginForm.style.display = "block";
+      document.getElementById("email").value    = "";
+      document.getElementById("password").value = "";
+    });
+  };
+</script>
+</body>
+</html>
